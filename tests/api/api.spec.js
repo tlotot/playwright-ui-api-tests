@@ -1,0 +1,168 @@
+import { test, expect } from '@playwright/test';
+import { INVALID_DATA, VALID_USER } from '../../test-data/users';
+
+test.describe('productsList API', () => {
+  test('GET products list returns 200 and non-empty products array', async ({ request }) => {
+    const response = await request.get('/api/productsList');
+
+    expect(response.status()).toBe(200);
+
+    const body = await response.json();
+
+    expect(body.responseCode).toBe(200);
+    expect(Array.isArray(body.products)).toBe(true);
+    expect(body.products.length).toBeGreaterThan(0);
+  });
+
+  test('POST products list returns 405 method not supported', async ({ request }) => {
+    const response = await request.post('/api/productsList');
+
+    expect(response.status()).toBe(200);
+
+    const body = await response.json();
+
+    expect(body.responseCode).toBe(405);
+    expect(body.message).toContain('not supported');
+  });
+});
+
+test.describe('brandsList API', () => {
+  test('GET brands list returns 200 and non-empty brands array', async ({ request }) => {
+    const response = await request.get('/api/brandsList');
+
+    expect(response.status()).toBe(200);
+
+    const body = await response.json();
+
+    expect(body.responseCode).toBe(200);
+    expect(Array.isArray(body.brands)).toBe(true);
+    expect(body.brands.length).toBeGreaterThan(0);
+  });
+});
+
+test.describe('searchProduct API', () => {
+  test('POST search product returns 200 and matching results', async ({ request }) => {
+    const query = 'jeans';
+    const response = await request.post('/api/searchProduct', {
+      form: {
+        search_product: query,
+      },
+    });
+
+    expect(response.status()).toBe(200);
+
+    const body = await response.json();
+
+    expect(body.responseCode).toBe(200);
+    expect(Array.isArray(body.products)).toBe(true);
+    expect(body.products.length).toBeGreaterThan(0);
+
+    for (const product of body.products) {
+      expect(product).toHaveProperty('name');
+      expect(typeof product.name).toBe('string');
+      expect(product.name.toLowerCase()).toContain(query);
+    }
+  });
+
+  test('POST search product returns 400 without required parameter', async ({ request }) => {
+    const response = await request.post('/api/searchProduct');
+
+    expect(response.status()).toBe(200);
+
+    const body = await response.json();
+
+    expect(body.responseCode).toBe(400);
+    expect(body.message).toContain('search_product parameter is missing');
+  });
+});
+
+test.describe('verifyLogin API', () => {
+  test('POST verify login returns 200 for valid credentials', async ({ request }) => {
+    const response = await request.post('/api/verifyLogin', {
+      form: { email: VALID_USER.email, password: VALID_USER.password },
+    });
+
+    expect(response.status()).toBe(200);
+
+    const body = await response.json();
+
+    expect(body.responseCode).toBe(200);
+    expect(body.message).toContain('User exists');
+  });
+
+  test('POST verify login returns 404 for non-existing email', async ({ request }) => {
+    const response = await request.post('/api/verifyLogin', {
+      form: { email: INVALID_DATA.wrongEmail, password: VALID_USER.password },
+    });
+
+    expect(response.status()).toBe(200);
+
+    const body = await response.json();
+
+    expect(body.responseCode).toBe(404);
+    expect(body.message).toContain('User not found');
+  });
+
+  test('POST verify login returns 404 for invalid password', async ({ request }) => {
+    const response = await request.post('/api/verifyLogin', {
+      form: { email: VALID_USER.email, password: INVALID_DATA.wrongPassword },
+    });
+
+    expect(response.status()).toBe(200);
+
+    const body = await response.json();
+
+    expect(body.responseCode).toBe(404);
+    expect(body.message).toContain('User not found');
+  });
+
+  test('POST verify login returns 404 when email is missing', async ({ request }) => {
+    const response = await request.post('/api/verifyLogin', {
+      form: { email: INVALID_DATA.empty, password: VALID_USER.password },
+    });
+
+    expect(response.status()).toBe(200);
+
+    const body = await response.json();
+
+    expect(body.responseCode).toBe(404);
+    expect(body.message).toContain('User not found');
+  });
+
+  test('POST verify login returns 404 when password is missing', async ({ request }) => {
+    const response = await request.post('/api/verifyLogin', {
+      form: { email: VALID_USER.email, password: INVALID_DATA.empty },
+    });
+
+    expect(response.status()).toBe(200);
+
+    const body = await response.json();
+
+    expect(body.responseCode).toBe(404);
+    expect(body.message).toContain('User not found');
+  });
+
+  test('POST verify login returns 404 when email and password are missing', async ({ request }) => {
+    const response = await request.post('/api/verifyLogin', {
+      form: { email: INVALID_DATA.empty, password: INVALID_DATA.empty },
+    });
+
+    expect(response.status()).toBe(200);
+
+    const body = await response.json();
+
+    expect(body.responseCode).toBe(404);
+    expect(body.message).toContain('User not found');
+  });
+
+  test('DELETE verifyLogin endpoint returns 405', async ({ request }) => {
+    const response = await request.delete('/api/verifyLogin');
+
+    expect(response.status()).toBe(200);
+
+    const body = await response.json();
+
+    expect(body.responseCode).toBe(405);
+    expect(body.message).toContain('method is not supported');
+  });
+});
