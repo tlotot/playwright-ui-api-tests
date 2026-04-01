@@ -27,6 +27,7 @@ The application includes:
 - Add to cart flow
 - Cart validation
 - Guest checkout behavior
+- Login and authentication flow (positive & negative cases)
 
 ### API Tests
 - Products list validation
