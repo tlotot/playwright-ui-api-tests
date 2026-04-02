@@ -113,6 +113,32 @@ test.describe('searchProduct API', () => {
     expect(Array.isArray(body.products)).toBe(true);
     expect(body.products.length).toBe(0);
   });
+
+  test('POST search product is case insensitive', async ({ request }) => {
+    const SEARCH_PRODUCT_UPPER_CASE = 'Blue Top';
+    const SEARCH_PRODUCT_LOWER_CASE = 'blue top';
+
+    const responseUpperCase = await request.post('/api/searchProduct', {
+      form: { search_product: SEARCH_PRODUCT_UPPER_CASE },
+    });
+    expect(responseUpperCase.status()).toBe(200);
+    const bodyUpperCase = await responseUpperCase.json();
+
+    const responseLowerCase = await request.post('/api/searchProduct', {
+      form: { search_product: SEARCH_PRODUCT_LOWER_CASE },
+    });
+    expect(responseLowerCase.status()).toBe(200);
+    const bodyLowerCase = await responseLowerCase.json();
+
+    expect(bodyUpperCase.responseCode).toBe(200);
+    expect(bodyLowerCase.responseCode).toBe(200);
+
+    const bodyUpperCaseIds = bodyUpperCase.products.map((el) => el.id).sort((a, b) => a - b);
+
+    const bodyLowerCaseIds = bodyLowerCase.products.map((el) => el.id).sort((a, b) => a - b);
+
+    expect(bodyUpperCaseIds).toEqual(bodyLowerCaseIds);
+  });
 });
 
 test.describe('verifyLogin API', () => {
