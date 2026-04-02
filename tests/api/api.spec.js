@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { INVALID_DATA, VALID_USER } from '../../test-data/users';
+import { SEARCH_DATA } from '../../test-data/search-data';
 
 test.describe('productsList API', () => {
   test('GET products list returns 200 and non-empty products array', async ({ request }) => {
@@ -42,11 +43,9 @@ test.describe('brandsList API', () => {
 
 test.describe('searchProduct API', () => {
   test('POST search product returns 200 and matching results', async ({ request }) => {
-    const query = 'jeans';
-
     const response = await request.post('/api/searchProduct', {
       form: {
-        search_product: query,
+        search_product: SEARCH_DATA.validSearch,
       },
     });
     expect(response.status()).toBe(200);
@@ -60,7 +59,7 @@ test.describe('searchProduct API', () => {
     for (const product of body.products) {
       expect(product).toHaveProperty('name');
       expect(typeof product.name).toBe('string');
-      expect(product.name.toLowerCase()).toContain(query);
+      expect(product.name.toLowerCase()).toContain(SEARCH_DATA.validSearch);
     }
   });
 
@@ -102,7 +101,7 @@ test.describe('searchProduct API', () => {
 
   test('POST search product returns empty array for unknown query', async ({ request }) => {
     const response = await request.post('/api/searchProduct', {
-      form: { search_product: 'asdasdasdasd' },
+      form: { search_product: SEARCH_DATA.invalidSearch },
     });
 
     expect(response.status()).toBe(200);
@@ -115,17 +114,14 @@ test.describe('searchProduct API', () => {
   });
 
   test('POST search product is case insensitive', async ({ request }) => {
-    const SEARCH_PRODUCT_UPPER_CASE = 'Blue Top';
-    const SEARCH_PRODUCT_LOWER_CASE = 'blue top';
-
     const responseUpperCase = await request.post('/api/searchProduct', {
-      form: { search_product: SEARCH_PRODUCT_UPPER_CASE },
+      form: { search_product: SEARCH_DATA.upperCaseSearch },
     });
     expect(responseUpperCase.status()).toBe(200);
     const bodyUpperCase = await responseUpperCase.json();
 
     const responseLowerCase = await request.post('/api/searchProduct', {
-      form: { search_product: SEARCH_PRODUCT_LOWER_CASE },
+      form: { search_product: SEARCH_DATA.validSearch },
     });
     expect(responseLowerCase.status()).toBe(200);
     const bodyLowerCase = await responseLowerCase.json();
