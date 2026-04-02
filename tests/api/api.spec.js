@@ -39,6 +39,17 @@ test.describe('brandsList API', () => {
     expect(Array.isArray(body.brands)).toBe(true);
     expect(body.brands.length).toBeGreaterThan(0);
   });
+
+  test('PUT brands list returns 405 method not supported', async ({ request }) => {
+    const response = await request.put('/api/brandsList');
+
+    expect(response.status()).toBe(200);
+
+    const body = await response.json();
+
+    expect(body.responseCode).toBe(405);
+    expect(body.message).toContain('not supported');
+  });
 });
 
 test.describe('searchProduct API', () => {
