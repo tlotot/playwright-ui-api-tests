@@ -74,6 +74,41 @@ test.describe('searchProduct API', () => {
     expect(body.responseCode).toBe(400);
     expect(body.message).toContain('search_product parameter is missing');
   });
+
+  test('POST search product with empty string returns all products', async ({ request }) => {
+    const response = await request.post('/api/searchProduct', {
+      form: { search_product: '' },
+    });
+
+    expect(response.status()).toBe(200);
+    const searchBody = await response.json();
+
+    const allProductsResponse = await request.get('/api/productsList');
+    expect(allProductsResponse.status()).toBe(200);
+    const allProductsBody = await allProductsResponse.json();
+
+    expect(searchBody.responseCode).toBe(200);
+    expect(Array.isArray(searchBody.products)).toBe(true);
+
+    expect(allProductsBody.responseCode).toBe(200);
+    expect(Array.isArray(allProductsBody.products)).toBe(true);
+
+    expect(searchBody.products.length).toBe(allProductsBody.products.length);
+  });
+
+  test('POST search product returns empty array for unknown query', async ({ request }) => {
+    const response = await request.post('/api/searchProduct', {
+      form: { search_product: 'asdasdasdasd' },
+    });
+
+    expect(response.status()).toBe(200);
+
+    const body = await response.json();
+
+    expect(body.responseCode).toBe(200);
+    expect(Array.isArray(body.products)).toBe(true);
+    expect(body.products.length).toBe(0);
+  });
 });
 
 test.describe('verifyLogin API', () => {
