@@ -43,12 +43,12 @@ test.describe('brandsList API', () => {
 test.describe('searchProduct API', () => {
   test('POST search product returns 200 and matching results', async ({ request }) => {
     const query = 'jeans';
+
     const response = await request.post('/api/searchProduct', {
       form: {
         search_product: query,
       },
     });
-
     expect(response.status()).toBe(200);
 
     const body = await response.json();
@@ -94,6 +94,10 @@ test.describe('searchProduct API', () => {
     expect(Array.isArray(allProductsBody.products)).toBe(true);
 
     expect(searchBody.products.length).toBe(allProductsBody.products.length);
+
+    const sortedAllProductsIDs = allProductsBody.products.map((el) => el.id).sort((a, b) => a - b);
+    const sortedProductsIDs = searchBody.products.map((el) => el.id).sort((a, b) => a - b);
+    expect(sortedProductsIDs).toEqual(sortedAllProductsIDs);
   });
 
   test('POST search product returns empty array for unknown query', async ({ request }) => {
