@@ -238,3 +238,26 @@ test.describe('verifyLogin API', () => {
     expect(body.message).toContain('method is not supported');
   });
 });
+
+test.describe('getUserDetailByEmail API', () => {
+  test('GET getUserDetailByEmail returns 200 for valid email', async ({ request }) => {
+    const response = await request.get('/api/getUserDetailByEmail', {
+      params: { email: VALID_USER.email },
+    });
+
+    expect(response.status()).toBe(200);
+
+    const body = await response.json();
+
+    expect(body.responseCode).toBe(200);
+    expect(typeof body.user).toBe('object');
+
+    expect(body.user).toHaveProperty('id');
+    expect(body.user).toHaveProperty('name');
+    expect(body.user).toHaveProperty('email', VALID_USER.email);
+
+    expect(typeof body.user.id).toBe('number');
+    expect(typeof body.user.name).toBe('string');
+    expect(typeof body.user.email).toBe('string');
+  });
+});
