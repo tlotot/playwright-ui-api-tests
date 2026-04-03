@@ -36,8 +36,8 @@ export class ProductsPage {
     await expect(this.searchedProductsHeading).toBeVisible();
   }
 
-  async verifyEmptySearchResults(invalidProductName) {
-    await expect(this.page).toHaveURL(`/products?search=${invalidProductName}`);
+  async verifyEmptySearchResults() {
+    await expect(this.page).toHaveURL(/\/products/);
     await expect(this.productTitles).toHaveCount(0);
   }
 

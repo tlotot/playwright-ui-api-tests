@@ -25,7 +25,7 @@ test.describe('Product search', () => {
     await productsPage.open();
     await productsPage.searchFor(SEARCH_DATA.invalidSearch);
 
-    await productsPage.verifyEmptySearchResults(SEARCH_DATA.invalidSearch);
+    await productsPage.verifyEmptySearchResults();
   });
 
   test('Search results update when user changes query', async ({ page }) => {
