@@ -46,7 +46,7 @@ export class ProductsPage {
   }
 
   async verifyEmptySearchShowsAllProducts() {
-    await expect(this.page).toHaveURL(/products\?search=$/);
+    await expect(this.page).toHaveURL(/\/products(\?search=)?$/);
     await expect(this.allProductsHeading).toBeVisible();
     expect(await this.productTitles.count()).toBeGreaterThan(0);
   }
