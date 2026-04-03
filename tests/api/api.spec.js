@@ -260,4 +260,17 @@ test.describe('getUserDetailByEmail API', () => {
     expect(typeof body.user.name).toBe('string');
     expect(typeof body.user.email).toBe('string');
   });
+
+  test('GET getUserDetailByEmail returns 404 for non-existing email', async ({ request }) => {
+    const response = await request.get('/api/getUserDetailByEmail', {
+      params: { email: INVALID_DATA.wrongEmail },
+    });
+
+    expect(response.status()).toBe(200);
+
+    const body = await response.json();
+
+    expect(body.responseCode).toBe(404);
+    expect(body.message).toContain('not found');
+  });
 });
