@@ -284,4 +284,15 @@ test.describe('getUserDetailByEmail API', () => {
     expect(body.responseCode).toBe(400);
     expect(body.message).toContain('email parameter is missing');
   });
+
+  test('POST getUserDetailByEmail returns 405 method not supported', async ({ request }) => {
+    const response = await request.post('/api/getUserDetailByEmail');
+
+    expect(response.status()).toBe(200);
+
+    const body = await response.json();
+
+    expect(body.responseCode).toBe(405);
+    expect(body.message).toContain('method is not supported');
+  });
 });
