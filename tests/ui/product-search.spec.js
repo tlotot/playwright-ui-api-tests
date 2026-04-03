@@ -1,6 +1,6 @@
-import { test, expect } from './setup';
-import { ProductsPage } from '../page-objects/products.page';
-import { SEARCH_DATA } from '../test-data/search-data';
+import { test, expect } from '../setup';
+import { ProductsPage } from '../../page-objects/products.page';
+import { SEARCH_DATA } from '../../test-data/search-data';
 
 test.describe('Product search', () => {
   test('Product search displays matching results', async ({ page }) => {

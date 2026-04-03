@@ -1,8 +1,8 @@
-import { test, expect } from './setup';
-import { ProductsPage } from '../page-objects/products.page';
-import { CartPage } from '../page-objects/cart.page';
-import { LoginPage } from '../page-objects/login.page';
-import { VALID_USER } from '../test-data/users';
+import { test, expect } from '../setup';
+import { ProductsPage } from '../../page-objects/products.page';
+import { CartPage } from '../../page-objects/cart.page';
+import { LoginPage } from '../../page-objects/login.page';
+import { VALID_USER } from '../../test-data/users';
 
 test.describe('Cart - guest user', () => {
   test('User can add a product to cart and see correct details', async ({ page }) => {

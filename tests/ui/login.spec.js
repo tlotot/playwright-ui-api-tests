@@ -1,5 +1,5 @@
-import { test } from './setup';
-import { VALID_USER, INVALID_DATA } from '../test-data/users';
+import { test } from '../setup';
+import { VALID_USER, INVALID_DATA } from '../../test-data/users';
 
 const negativeLoginCases = [
   {

@@ -63,10 +63,11 @@ export class CartPage {
   }
 
   async verifyCheckoutModalVisible() {
-    await expect(this.checkoutModal).toBeVisible();
+    await this.checkoutModal.waitFor({ state: 'visible' });
+
     await expect(this.checkoutModal.getByRole('heading', { name: 'Checkout' })).toBeVisible();
     await expect(this.checkoutModal).toContainText(
-      'Register / Login account to proceed on checkout.',
+      'Register / Login account to proceed on checkout',
     );
     await expect(this.registerLoginLink).toBeVisible();
   }

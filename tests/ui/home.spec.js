@@ -1,4 +1,4 @@
-import { test, expect } from './setup';
+import { test, expect } from '../setup';
 
 test('Smoke: home page should open and display navigation', async ({ page }) => {
   await page.goto('https://automationexercise.com/');

@@ -1,4 +1,4 @@
-import { test, expect } from './setup';
+import { test, expect } from '../setup';
 
 test('User can register and delete account', async ({ page }) => {
   const name = 'Tina';
