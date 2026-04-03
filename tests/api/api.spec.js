@@ -273,4 +273,15 @@ test.describe('getUserDetailByEmail API', () => {
     expect(body.responseCode).toBe(404);
     expect(body.message).toContain('not found');
   });
+
+  test('GET getUserDetailByEmail returns 400 when email is missing', async ({ request }) => {
+    const response = await request.get('/api/getUserDetailByEmail');
+
+    expect(response.status()).toBe(200);
+
+    const body = await response.json();
+
+    expect(body.responseCode).toBe(400);
+    expect(body.message).toContain('email parameter is missing');
+  });
 });
