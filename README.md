@@ -30,10 +30,18 @@ The application includes:
 - Login and authentication flow (positive & negative cases)
 
 ### API Tests
+
+Automation Exercise API:
 - Products list validation
 - Brands list validation
 - Search API
 - Login API (positive & negative cases)
+
+Conduit API (https://conduit-api.bondaracademy.com):
+- Authentication (JWT-based login)
+- Login endpoint (/api/users/login)
+- Positive and negative login scenarios
+- Validation cases (empty email, password)
 
 ### Architecture
 - Page Object Model (POM)
