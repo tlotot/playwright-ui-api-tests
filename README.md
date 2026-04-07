@@ -37,7 +37,7 @@ Automation Exercise API:
 - Search API
 - Login API (positive & negative cases)
 
-Conduit API (https://conduit-api.bondaracademy.com):
+Conduit API (https://conduit.bondaracademy.com/):
 - Authentication (JWT-based login)
 - Login endpoint (/api/users/login)
 - Positive and negative login scenarios
