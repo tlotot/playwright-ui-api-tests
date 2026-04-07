@@ -1,7 +1,7 @@
 export const VALID_USER = {
   email: 'test122345@yahoo.com',
-  password: '12345',
-  name: 'Tina',
+  password: '12345678',
+  name: 'Tayana',
 };
 
 export const INVALID_DATA = {
