@@ -140,4 +140,49 @@ test.describe('POST /api/users/login', () => {
     expect(body.errors).toBeDefined();
     expect(body.errors.email[0]).toBe("can't be blank");
   });
+
+  test('POST /api/users/login returns 403 with invalid email format', async ({ request }) => {
+    const response = await request.post('https://conduit-api.bondaracademy.com/api/users/login', {
+      data: {
+        user: {
+          email: INVALID_DATA.invalidEmailFormat,
+          password: VALID_USER.password,
+        },
+      },
+    });
+
+    expect(response.status()).toBe(403);
+
+    const body = await response.json();
+
+    expect(body.errors).toBeDefined();
+    expect(body.errors['email or password']).toContain('is invalid');
+  });
+
+  test('POST /api/users/login returns 403 with missing email key', async ({ request }) => {
+    const response = await request.post('https://conduit-api.bondaracademy.com/api/users/login', {
+      data: {
+        user: {
+          password: VALID_USER.password,
+        },
+      },
+    });
+
+    expect(response.status()).toBe(422);
+
+    const body = await response.json();
+
+    expect(body.errors).toBeDefined();
+    expect(body.errors.email[0]).toBe("can't be blank");
+  });
+
+  test('POST /api/users/login does not allow GET request', async ({ request }) => {
+    const response = await request.get('https://conduit-api.bondaracademy.com/api/users/login');
+
+    expect(response.status()).toBe(404);
+
+    const body = await response.text();
+
+    expect(body).toContain('Cannot GET /api/users/login');
+  });
 });
