@@ -10,9 +10,15 @@ test.describe('POST /api/users/login', () => {
 
     expect(response.status()).toBe(200);
 
+    // verify response format (API returns JSON)
+    expect(response.headers()['content-type']).toContain('application/json');
+
     const body = await response.json();
 
+    // verify returned user email
     expect(body.user.email).toBe(VALID_USER.email);
+
+    // verify token exists and is string
     expect(body.user.token).toEqual(expect.any(String));
   });
 
