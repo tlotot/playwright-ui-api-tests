@@ -2,20 +2,12 @@ import { test, expect } from '@playwright/test';
 import { VALID_USER, INVALID_DATA } from '../../test-data/users';
 import Ajv from 'ajv';
 
-let apiContext;
-
-test.beforeAll(async ({ playwright }) => {
-  apiContext = await playwright.request.newContext({
-    baseURL: 'https://conduit-api.bondaracademy.com',
-  });
-});
-
-test.afterAll(async () => {
-  await apiContext.dispose();
+test.use({
+  baseURL: 'https://conduit-api.bondaracademy.com',
 });
 
 test.describe('POST /api/users/login', () => {
-  test('returns token with valid credentials', async () => {
+  test('returns token with valid credentials', async ({ request }) => {
     const loginPayload = {
       user: {
         email: VALID_USER.email,
@@ -23,7 +15,7 @@ test.describe('POST /api/users/login', () => {
       },
     };
 
-    const response = await apiContext.post('/api/users/login', {
+    const response = await request.post('/api/users/login', {
       data: loginPayload,
     });
 
@@ -36,7 +28,7 @@ test.describe('POST /api/users/login', () => {
     expect(body.user.token).toEqual(expect.any(String));
   });
 
-  test('returns response matching user schema', async () => {
+  test('returns response matching user schema', async ({ request }) => {
     const loginPayload = {
       user: {
         email: VALID_USER.email,
@@ -44,7 +36,7 @@ test.describe('POST /api/users/login', () => {
       },
     };
 
-    const response = await apiContext.post('/api/users/login', {
+    const response = await request.post('/api/users/login', {
       data: loginPayload,
     });
 
@@ -77,7 +69,7 @@ test.describe('POST /api/users/login', () => {
     expect(validate(body)).toBe(true);
   });
 
-  test('returns 403 with wrong password', async () => {
+  test('returns 403 with wrong password', async ({ request }) => {
     const loginPayload = {
       user: {
         email: VALID_USER.email,
@@ -85,7 +77,7 @@ test.describe('POST /api/users/login', () => {
       },
     };
 
-    const response = await apiContext.post('/api/users/login', {
+    const response = await request.post('/api/users/login', {
       data: loginPayload,
     });
 
@@ -97,7 +89,7 @@ test.describe('POST /api/users/login', () => {
     expect(body.user).toBeUndefined();
   });
 
-  test('returns 403 with wrong email', async () => {
+  test('returns 403 with wrong email', async ({ request }) => {
     const loginPayload = {
       user: {
         email: INVALID_DATA.wrongEmail,
@@ -105,7 +97,7 @@ test.describe('POST /api/users/login', () => {
       },
     };
 
-    const response = await apiContext.post('/api/users/login', {
+    const response = await request.post('/api/users/login', {
       data: loginPayload,
     });
 
@@ -117,7 +109,7 @@ test.describe('POST /api/users/login', () => {
     expect(body.user).toBeUndefined();
   });
 
-  test('returns 403 with invalid email and password', async () => {
+  test('returns 403 with invalid email and password', async ({ request }) => {
     const loginPayload = {
       user: {
         email: INVALID_DATA.wrongEmail,
@@ -125,7 +117,7 @@ test.describe('POST /api/users/login', () => {
       },
     };
 
-    const response = await apiContext.post('/api/users/login', {
+    const response = await request.post('/api/users/login', {
       data: loginPayload,
     });
 
@@ -137,7 +129,7 @@ test.describe('POST /api/users/login', () => {
     expect(body.user).toBeUndefined();
   });
 
-  test('returns 422 when password is empty', async () => {
+  test('returns 422 when password is empty', async ({ request }) => {
     const loginPayload = {
       user: {
         email: VALID_USER.email,
@@ -145,7 +137,7 @@ test.describe('POST /api/users/login', () => {
       },
     };
 
-    const response = await apiContext.post('/api/users/login', {
+    const response = await request.post('/api/users/login', {
       data: loginPayload,
     });
 
@@ -156,7 +148,7 @@ test.describe('POST /api/users/login', () => {
     expect(body.errors.password[0]).toBe("can't be blank");
   });
 
-  test('returns 422 when email is empty', async () => {
+  test('returns 422 when email is empty', async ({ request }) => {
     const loginPayload = {
       user: {
         email: INVALID_DATA.empty,
@@ -164,7 +156,7 @@ test.describe('POST /api/users/login', () => {
       },
     };
 
-    const response = await apiContext.post('/api/users/login', {
+    const response = await request.post('/api/users/login', {
       data: loginPayload,
     });
 
@@ -175,7 +167,7 @@ test.describe('POST /api/users/login', () => {
     expect(body.errors.email[0]).toBe("can't be blank");
   });
 
-  test('returns 403 with invalid email format', async () => {
+  test('returns 403 with invalid email format', async ({ request }) => {
     const loginPayload = {
       user: {
         email: INVALID_DATA.invalidEmailFormat,
@@ -183,7 +175,7 @@ test.describe('POST /api/users/login', () => {
       },
     };
 
-    const response = await apiContext.post('/api/users/login', {
+    const response = await request.post('/api/users/login', {
       data: loginPayload,
     });
 
@@ -194,14 +186,14 @@ test.describe('POST /api/users/login', () => {
     expect(body.errors['email or password']).toContain('is invalid');
   });
 
-  test('returns 422 with missing email key', async () => {
+  test('returns 422 with missing email key', async ({ request }) => {
     const loginPayload = {
       user: {
         password: VALID_USER.password,
       },
     };
 
-    const response = await apiContext.post('/api/users/login', {
+    const response = await request.post('/api/users/login', {
       data: loginPayload,
     });
 
@@ -212,8 +204,8 @@ test.describe('POST /api/users/login', () => {
     expect(body.errors.email[0]).toBe("can't be blank");
   });
 
-  test('does not allow GET request', async () => {
-    const response = await apiContext.get('/api/users/login');
+  test('does not allow GET request', async ({ request }) => {
+    const response = await request.get('/api/users/login');
 
     expect(response.status()).toBe(404);
 
