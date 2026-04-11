@@ -1,5 +1,6 @@
 import { test as base, expect } from '@playwright/test';
 import { LoginPage } from '../page-objects/login.page';
+import { RegisterPage } from '../page-objects/register.page';
 
 /*
  Global test setup.
@@ -32,6 +33,11 @@ export const test = base.extend({
     const loginPage = new LoginPage(page);
     await loginPage.open();
     await use(loginPage);
+  },
+
+  registerPage: async ({ page }, use) => {
+    const registerPage = new RegisterPage(page);
+    await use(registerPage);
   },
 });
 
