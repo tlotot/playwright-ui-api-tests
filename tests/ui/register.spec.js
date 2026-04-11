@@ -14,6 +14,11 @@ async function registerNewUser(registerPage, userData, email) {
 }
 
 test.describe('User registration', () => {
+  test('Smoke: Signup page can be opened', async ({ registerPage }) => {
+  await registerPage.openSignupPage();
+  await registerPage.verifySignupPageOpened();
+});
+
   test('User can register successfully', async ({ registerPage }) => {
     const email = generateUniqueEmail();
     await registerNewUser(registerPage, REGISTRATION_DATA, email);
