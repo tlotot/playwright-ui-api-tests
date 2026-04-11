@@ -1,59 +1,112 @@
 # Playwright UI & API Test Automation
 
-This project contains automated UI and API tests built with Playwright and JavaScript.  
-It demonstrates UI and API testing using Playwright with Page Object Model, test data separation, and fixtures.
+This project demonstrates practical experience in **UI and API test automation** using Playwright.
+
+It includes:
+- Page Object Model (POM)
+- Test data separation
+- Fixtures
+- UI + API test coverage
+- Positive and negative scenarios
 
 ---
 
-## Application under test
+## Application Under Test
 
-Public demo application used for UI and API test automation practice:
+Public demo applications used for automation practice:
 
-https://automationexercise.com/
+- UI/API: [Automation Exercise](https://automationexercise.com/)
+- Auth API: [Conduit API](https://conduit-api.bondaracademy.com/)
 
 The application includes:
-- product catalog
-- cart functionality
-- user authentication
-- API endpoints for testing
+- product catalog  
+- cart functionality  
+- user authentication  
+- public API endpoints  
+
+---
+
+## What This Project Demonstrates
+
+- Writing maintainable UI tests using Playwright  
+- Structuring tests with Page Object Model  
+- API testing with Playwright request context  
+- Validation of responses and error handling  
+- Use of fixtures for reusable setup  
+- Separation of test data from test logic  
+
+---
+
+## Tech Stack
+
+- Playwright (JavaScript)  
+- Node.js  
+- AJV (JSON schema validation)  
+- GitHub  
 
 ---
 
 ## Features
 
 ### UI Tests
-- Products page validation
-- Search functionality
-- Add to cart flow
-- Cart validation
-- Guest checkout behavior
-- Login and authentication flow (positive & negative cases)
+- Home page validation  
+- User login (positive & negative cases)  
+- User registration  
+- Product search  
+- Add to cart flow  
+- Cart validation  
+- Guest checkout behavior  
+- Cart persistence after login  
 
 ### API Tests
+- Get all products  
+- Get brands list  
+- Search product  
+- Verify login  
+- Get user details by email  
 
-Automation Exercise API:
-- Products list validation
-- Brands list validation
-- Search API
-- Login API (positive & negative cases)
-
-Conduit API (https://conduit.bondaracademy.com/):
-- Authentication (JWT-based login)
-- Login endpoint (/api/users/login)
-- Positive and negative login scenarios
-- Validation cases (empty email, password)
-
-### Architecture
-- Page Object Model (POM)
-- Test data separation
-- Reusable fixtures (setup)
-- Clear test structure
+### Negative Scenarios
+- Invalid input data  
+- Missing required fields  
+- Unsupported HTTP methods  
 
 ---
 
-## Tech Stack
+## Test Data
 
-- Playwright
-- JavaScript (Node.js)
+Test data is stored in the `test-data` folder and separated from test logic.
 
 ---
+
+## Notes
+
+- This project uses public demo applications for testing purposes  
+- Some tests rely on dynamic data (e.g., unique email for registration)  
+- API tests include both positive and negative scenarios  
+
+---
+
+## Installation
+
+```bash
+git clone https://github.com/tlotot/playwright-ui-api-tests.git
+cd playwright-ui-api-tests
+npm install
+npx playwright install
+npm run test
+```
+---
+
+## Author
+
+Tetiana Lototska
+
+---
+
+## Summary
+
+This project demonstrates practical skills in:
+
+- UI and API test automation
+- test architecture and maintainability
+- working with real-world scenarios (authentication, cart, search)
