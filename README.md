@@ -1,6 +1,6 @@
 # Playwright UI & API Test Automation
 
-This project demonstrates practical experience in **UI and API test automation** using Playwright.
+This project demonstrates practical experience in **UI and API test automation** using Playwright, including CI integration with GitHub Actions.
 
 It includes:
 - Page Object Model (POM)
@@ -69,6 +69,14 @@ The application includes:
 - Invalid input data  
 - Missing required fields  
 - Unsupported HTTP methods  
+
+---
+
+## CI (GitHub Actions)
+
+- This project includes a configured GitHub Actions workflow that automatically runs Playwright tests on every push.  
+- The pipeline installs dependencies, sets up browsers, executes UI and API tests, and generates a Playwright HTML report as an artifact.  
+- Test results can be reviewed directly in GitHub Actions.
 
 ---
 
