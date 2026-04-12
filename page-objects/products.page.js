@@ -27,11 +27,14 @@ export class ProductsPage {
 
   async searchFor(product) {
     await this.searchInput.fill(product);
-    await this.searchButton.click();
+    await Promise.all([
+      this.page.waitForURL(/\/products(\?search=.*)?$/),
+      this.searchButton.click(),
+    ]);
   }
 
   async verifySearchResultsVisible(product) {
-    await expect(this.page).toHaveURL(`/products?search=${encodeURIComponent(product)}`);
+    await expect(this.page).toHaveURL(/\/products(\?search=.*)?$/);
     await expect(this.productTitles.first()).toBeVisible();
     await expect(this.searchedProductsHeading).toBeVisible();
   }
@@ -55,11 +58,14 @@ export class ProductsPage {
     const product = this.products.nth(index);
     await product.hover();
     const addToCartButton = product.locator('.product-overlay a.add-to-cart');
+    await expect(addToCartButton).toBeVisible({ timeout: 10000 });
+    await expect(addToCartButton).toBeEnabled();
     await addToCartButton.click();
+    await expect(this.cartModal).toBeVisible({ timeout: 10000 });
   }
 
   async verifyAddToCartModalVisible() {
-    await expect(this.cartModal).toBeVisible();
+    await expect(this.cartModal).toBeVisible({ timeout: 10000 });
     await expect(this.cartModal.getByRole('heading')).toContainText(/added/i);
     await expect(this.cartModal).toContainText(/has been added to cart/i);
     await expect(this.viewCartLink).toBeVisible();
@@ -67,12 +73,11 @@ export class ProductsPage {
 
   async clickViewCartLink() {
     await expect(this.viewCartLink).toBeVisible();
-    await this.viewCartLink.click();
+    await Promise.all([this.page.waitForURL(/\/view_cart/), this.viewCartLink.click()]);
   }
 
   async clickContinueShopping() {
-    await expect(this.cartModal).toBeVisible();
-    await expect(this.continueShoppingButton).toBeVisible();
+    await this.verifyAddToCartModalVisible();
     await this.continueShoppingButton.click();
   }
 

@@ -29,7 +29,9 @@ export class CartPage {
 
   async deleteFirstCartProduct() {
     const cartRow = this.cartRows.first();
+    const countBefore = await this.cartRows.count();
     await cartRow.locator('.cart_quantity_delete').click();
+    await expect(this.cartRows).toHaveCount(Math.max(countBefore - 1, 0));
   }
 
   async verifyEmptyCartBlock() {
@@ -63,7 +65,7 @@ export class CartPage {
   }
 
   async verifyCheckoutModalVisible() {
-    await this.checkoutModal.waitFor({ state: 'visible' });
+    await expect(this.checkoutModal).toBeVisible({ timeout: 10000 });
 
     await expect(this.checkoutModal.getByRole('heading', { name: 'Checkout' })).toBeVisible();
     await expect(this.checkoutModal).toContainText(
